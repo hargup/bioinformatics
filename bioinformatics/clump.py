@@ -11,12 +11,26 @@ def find_clumps(text, k, L, t):
     instances of the given k-mer.
     """
     valid_k_mers = set()
-    for i in range(len(text) - L + 1):
-        substring = text[i: i+L]
-        substr_freq = compute_frequencies(substring, k)
+    substring = text[:L]
+    substr_freq = compute_frequencies(substring, k)
+    for substr in substr_freq.keys():
+        if substr_freq[substr] >= t:
+            valid_k_mers.add(substr)
+
+    for i in range(1, len(text) - L + 1):
+        removed_substr = text[i-1: i-1+k]
+        added_substr = text[i+L-k: i+L]
+        substr_freq[removed_substr] -= 1
+
+        if added_substr in substr_freq.keys():
+            substr_freq[added_substr] += 1
+        else:
+            substr_freq[added_substr] = 1
+
         for substr in substr_freq.keys():
             if substr_freq[substr] >= t:
                 valid_k_mers.add(substr)
+
 
     return valid_k_mers
 
