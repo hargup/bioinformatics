@@ -1,0 +1,7 @@
+*.pyc
+tags
+main.py
+in.in
+datasets
+output
+ropeproject
