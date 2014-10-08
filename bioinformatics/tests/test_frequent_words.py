@@ -1,8 +1,6 @@
-def test_sanity_check_pass():
-    assert True
+from bioinformatics.frequent_words import compute_frequencies
 
-def test_sanity_check_fail():
-    assert False
 
-def test_sanity_check_error():
-    assert 0/0
+def test_compute_frequencies():
+    assert compute_frequencies("ATG", 2) == {"AT": 1,
+                                             "TG": 1}

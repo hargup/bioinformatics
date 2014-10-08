@@ -49,18 +49,20 @@ def find_all_occurances(text, pattern):
     return all_occurances
 
 
-def computing_frequencies(text, k):
+def compute_frequencies(text, k):
     """
     compute frequencies of all k-mers in the text
     """
-    frequency_array = [0 for i in range(0, pow(4, k))]
+    frequency_dict = dict()
 
     for i in range(len(text) - k + 1):
         pattern = text[i: i + k]
-        j = pattern_to_number(pattern)
-        frequency_array[j] += 1
+        if pattern in frequency_dict.keys():
+            frequency_dict[pattern] += 1
+        else:
+            frequency_dict[pattern] = 1
 
-    return frequency_array
+    return frequency_dict
 
 
 bp_num_dict = {
