@@ -6,6 +6,14 @@ def all_kerms(k):
     return k_mers
 
 
+def all_kerms_in_text(text, k):
+    k_mers = set()
+    for i in range(len(text)-k+1):
+        k_mers.add(text[i:i+k])
+
+    return k_mers
+
+
 # There are two approaches, either I can find the all the possible k-mers of
 # compute a dictionary of before hand and then update it. The other approach
 # is to create a dictionory on the fly. While iterating over the genome
@@ -31,7 +39,7 @@ def find_clumps(text, k, L, t):
     valid_k_mers = set()
 
     # intialize frequencies
-    substr_freq = dict([(k_mer, 0) for k_mer in all_kerms(k)])
+    substr_freq = dict([(k_mer, 0) for k_mer in all_kerms_in_text(text, k)])
 
     # find the frequencies in the first clump
     for i in range(0, L-k+1):
