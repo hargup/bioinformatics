@@ -27,10 +27,8 @@ def find_clumps(text, k, L, t):
         else:
             substr_freq[added_substr] = 1
 
-        for substr in substr_freq.keys():
-            if substr_freq[substr] >= t:
-                valid_k_mers.add(substr)
-
+        if substr_freq[added_substr] >= t:
+            valid_k_mers.add(added_substr)
 
     return valid_k_mers
 
