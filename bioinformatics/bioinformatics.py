@@ -1,3 +1,17 @@
+def all_kerms(k):
+    from itertools import product
+    k_mers = [''.join(bp_tuple) for bp_tuple in product('ATGC', repeat=k)]
+    return k_mers
+
+
+def all_kerms_in_text(text, k):
+    k_mers = set()
+    for i in range(len(text)-k+1):
+        k_mers.add(text[i:i+k])
+
+    return k_mers
+
+
 def read_fasta_strings(in_file):
     """ Reads the input and returns a dictionary of rna inputs """
     tags = []

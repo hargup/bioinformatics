@@ -1,17 +1,4 @@
-from .frequent_words import compute_frequencies
-
-def all_kerms(k):
-    from itertools import product
-    k_mers = [''.join(bp_tuple) for bp_tuple in product('ATGC', repeat=k)]
-    return k_mers
-
-
-def all_kerms_in_text(text, k):
-    k_mers = set()
-    for i in range(len(text)-k+1):
-        k_mers.add(text[i:i+k])
-
-    return k_mers
+from .bioinformatics import all_kerms_in_text
 
 
 # There are two approaches, either I can find the all the possible k-mers of
