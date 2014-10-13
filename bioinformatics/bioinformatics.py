@@ -45,3 +45,7 @@ def overlay_graph(dna_strings):
             if is_connected(dna_strings[dna_a], dna_strings[dna_b]):
                 graph.append((dna_a, dna_b))
     return graph
+
+
+def hamming_distance(a, b):
+    return sum([1 for p, q in zip(a, b) if p != q])
