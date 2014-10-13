@@ -79,3 +79,21 @@ def find_all_approx_occurances(text, pattern, d):
             all_occurances.append(i)
 
     return all_occurances
+
+
+def count_d(text, pattern, d):
+    """
+    We define count_d(text, pattern) as the total number of occurrences
+    of Pattern in Text with at most d mismatches.
+    """
+    return len(find_all_approx_occurances(text, pattern, d))
+
+
+def frequest_words_with_missmatches(text, k, d):
+    substr_freq = dict([(k_mer, count_d(text, k_mer, d))
+                        for k_mer in all_kerms(k)])
+
+    max_freq = max(substr_freq.values())
+    frequent_words = [k_mer for k_mer in substr_freq.keys()
+                      if substr_freq[k_mer] == max_freq]
+    return set(frequent_words)
