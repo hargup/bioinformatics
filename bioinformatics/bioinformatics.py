@@ -49,3 +49,19 @@ def overlay_graph(dna_strings):
 
 def hamming_distance(a, b):
     return sum([1 for p, q in zip(a, b) if p != q])
+
+
+def find_all_approx_occurances(text, pattern, d):
+    """
+    Find all starting positions where Pattern appears as a substring of Text
+    with at most d mismatches.
+    """
+    all_occurances = list()
+    k = len(pattern)
+    n = len(text)
+
+    for i in range(0, n - k + 1):
+        if hamming_distance(text[i: i+k], pattern) <= d:
+            all_occurances.append(i)
+
+    return all_occurances
