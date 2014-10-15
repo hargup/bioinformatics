@@ -1,3 +1,5 @@
+neucleotides = ['A', 'T', 'G', 'C']
+
 def all_kerms(k):
     from itertools import product
     k_mers = [''.join(bp_tuple) for bp_tuple in product('ATGC', repeat=k)]
@@ -97,3 +99,20 @@ def frequest_words_with_missmatches(text, k, d):
     frequent_words = [k_mer for k_mer in substr_freq.keys()
                       if substr_freq[k_mer] == max_freq]
     return set(frequent_words)
+
+
+def d_distance_apart(text, d):
+    """
+    Returns a list of all DNA strings which have a hamming distance of d
+    or less with the given string.
+    """
+    if d == 0:
+        return [text]
+    elif len(text) == 0:
+        return []
+    else:
+        str_list = [text[0] + tail for tail in d_distance_apart(text[1:], d)] + \
+            [bp + tail for tail in d_distance_apart(text[1:], d - 1)
+             for bp in set(neucleotides) - set([text[0]])] + \
+            [bp + text[1:] for bp in neucleotides]
+        return list(set(str_list))
