@@ -92,8 +92,16 @@ def count_d(text, pattern, d):
 
 
 def frequest_words_with_missmatches(text, k, d):
-    substr_freq = dict([(k_mer, count_d(text, k_mer, d))
-                        for k_mer in all_kerms(k)])
+    possible_k_mers = []
+    for i in range(len(text)-k+1):
+        possible_k_mers += d_distance_apart(text[i: i+k], d)
+    possible_k_mers = list(set(possible_k_mers))
+
+    substr_freq = dict([(k_mer, 0) for k_mer in possible_k_mers])
+
+    for i in range(len(text)-k+1):
+        for k_mer in d_distance_apart(text[i: i+k], d):
+            substr_freq[k_mer] += 1
 
     max_freq = max(substr_freq.values())
     frequent_words = [k_mer for k_mer in substr_freq.keys()
