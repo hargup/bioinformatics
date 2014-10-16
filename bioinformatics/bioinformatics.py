@@ -1,5 +1,6 @@
 neucleotides = ['A', 'T', 'G', 'C']
 
+
 def all_kerms(k):
     from itertools import product
     k_mers = [''.join(bp_tuple) for bp_tuple in product('ATGC', repeat=k)]
@@ -101,6 +102,37 @@ def frequest_words_with_missmatches(text, k, d):
 
     for i in range(len(text)-k+1):
         for k_mer in d_distance_apart(text[i: i+k], d):
+            substr_freq[k_mer] += 1
+
+    max_freq = max(substr_freq.values())
+    frequent_words = [k_mer for k_mer in substr_freq.keys()
+                      if substr_freq[k_mer] == max_freq]
+    return set(frequent_words)
+
+# There is a lot of code dublication between this function and the above one
+# I can rewrite the both of them as a special case of generalised function.
+
+
+def fwmrcp(text, k, d):
+    """
+    Frequent Words with Mismatches and Reverse Complements Problem
+
+    Find the most frequent k-mers (with mismatches and reverse complements) in
+    a DNA string.
+    """
+    possible_k_mers = []
+    for i in range(len(text)-k+1):
+        possible_k_mers += d_distance_apart(text[i: i+k], d)
+        possible_k_mers += d_distance_apart(rev_comp(text[i: i+k]), d)
+    possible_k_mers = list(set(possible_k_mers))
+
+    substr_freq = dict([(k_mer, 0) for k_mer in possible_k_mers])
+
+    for i in range(len(text)-k+1):
+        for k_mer in d_distance_apart(text[i: i+k], d):
+            substr_freq[k_mer] += 1
+
+        for k_mer in d_distance_apart(rev_comp(text[i: i+k]), d):
             substr_freq[k_mer] += 1
 
     max_freq = max(substr_freq.values())
