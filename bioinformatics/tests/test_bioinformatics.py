@@ -1,6 +1,6 @@
 from bioinformatics import (
     hamming_distance, find_all_approx_occurances, count_d,
-    frequest_words_with_missmatches, fwmrcp)
+    frequest_words_with_missmatches, fwmrcp, translate)
 
 
 def test_hamming_distance():
@@ -33,3 +33,9 @@ def test_fwmrcp():
     d = 1
     assert fwmrcp(text, k, d) == \
         set(["ATGT", "ACAT"])
+
+
+def test_translate():
+    rna = "AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA"
+    peptide = "MAMAPRTEINSTRING"
+    assert translate(rna) == peptide

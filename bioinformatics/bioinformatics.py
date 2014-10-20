@@ -1,5 +1,71 @@
 neucleotides = ['A', 'T', 'G', 'C']
 
+translation_dict = {
+    "AAA": "K",
+    "AAC": "N",
+    "AAG": "K",
+    "AAU": "N",
+    "ACA": "T",
+    "ACC": "T",
+    "ACG": "T",
+    "ACU": "T",
+    "AGA": "R",
+    "AGC": "S",
+    "AGG": "R",
+    "AGU": "S",
+    "AUA": "I",
+    "AUC": "I",
+    "AUG": "M",
+    "AUU": "I",
+    "CAA": "Q",
+    "CAC": "H",
+    "CAG": "Q",
+    "CAU": "H",
+    "CCA": "P",
+    "CCC": "P",
+    "CCG": "P",
+    "CCU": "P",
+    "CGA": "R",
+    "CGC": "R",
+    "CGG": "R",
+    "CGU": "R",
+    "CUA": "L",
+    "CUC": "L",
+    "CUG": "L",
+    "CUU": "L",
+    "GAA": "E",
+    "GAC": "D",
+    "GAG": "E",
+    "GAU": "D",
+    "GCA": "A",
+    "GCC": "A",
+    "GCG": "A",
+    "GCU": "A",
+    "GGA": "G",
+    "GGC": "G",
+    "GGG": "G",
+    "GGU": "G",
+    "GUA": "V",
+    "GUC": "V",
+    "GUG": "V",
+    "GUU": "V",
+    "UAA": "*",
+    "UAC": "Y",
+    "UAG": "*",
+    "UAU": "Y",
+    "UCA": "S",
+    "UCC": "S",
+    "UCG": "S",
+    "UCU": "S",
+    "UGA": "*",
+    "UGC": "C",
+    "UGG": "W",
+    "UGU": "C",
+    "UUA": "L",
+    "UUC": "F",
+    "UUG": "L",
+    "UUU": "F"}
+
 
 def all_kerms(k):
     from itertools import product
@@ -156,3 +222,12 @@ def d_distance_apart(text, d):
              for bp in set(neucleotides) - set([text[0]])] + \
             [bp + text[1:] for bp in neucleotides]
         return list(set(str_list))
+
+
+def translate(rna):
+    """
+    Translates the RNA strign to peptide
+    """
+    peptide = "".join([translation_dict[rna[i: i+3]]
+                       for i in range(0, len(rna), 3)])
+    return peptide[:peptide.index("*")]
