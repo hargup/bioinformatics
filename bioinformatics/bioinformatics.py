@@ -94,9 +94,19 @@ def read_fasta_strings(in_file):
     return strings
 
 
-def rev_comp(rna_str):
+def rev_comp_dna(dna_str):
     comp_dict = {'A': 'T',
                  'T': 'A',
+                 'G': 'C',
+                 'C': 'G'}
+
+    comp = ''.join([comp_dict[bp] for bp in dna_str])
+    return comp[::-1]
+
+
+def rev_comp_rna(rna_str):
+    comp_dict = {'A': 'U',
+                 'U': 'A',
                  'G': 'C',
                  'C': 'G'}
 
@@ -106,7 +116,7 @@ def rev_comp(rna_str):
 
 def all_reading_frames(rna_str):
     reading_frames = [rna_str, rna_str[1:], rna_str[2:]]
-    rna_rev_comp = rev_comp(rna_str)
+    rna_rev_comp = rev_comp_rna(rna_str)
     reading_frames.append(rna_rev_comp)
     reading_frames.append(rna_rev_comp[1:])
     reading_frames.append(rna_rev_comp[2:])
@@ -189,7 +199,7 @@ def fwmrcp(text, k, d):
     possible_k_mers = []
     for i in range(len(text)-k+1):
         possible_k_mers += d_distance_apart(text[i: i+k], d)
-        possible_k_mers += d_distance_apart(rev_comp(text[i: i+k]), d)
+        possible_k_mers += d_distance_apart(rev_comp_dna(text[i: i+k]), d)
     possible_k_mers = list(set(possible_k_mers))
 
     substr_freq = dict([(k_mer, 0) for k_mer in possible_k_mers])
@@ -198,7 +208,7 @@ def fwmrcp(text, k, d):
         for k_mer in d_distance_apart(text[i: i+k], d):
             substr_freq[k_mer] += 1
 
-        for k_mer in d_distance_apart(rev_comp(text[i: i+k]), d):
+        for k_mer in d_distance_apart(rev_comp_dna(text[i: i+k]), d):
             substr_freq[k_mer] += 1
 
     max_freq = max(substr_freq.values())
