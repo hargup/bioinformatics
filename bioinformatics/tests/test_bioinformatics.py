@@ -39,3 +39,6 @@ def test_translate():
     rna = "AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA"
     peptide = "MAMAPRTEINSTRING"
     assert translate(rna) == peptide
+
+    rna = "GA"
+    assert translate(rna) == ""

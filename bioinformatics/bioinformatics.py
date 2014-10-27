@@ -239,5 +239,8 @@ def translate(rna):
     Translates the RNA strign to peptide
     """
     peptide = "".join([translation_dict[rna[i: i+3]]
-                       for i in range(0, len(rna), 3)])
-    return peptide[:peptide.index("*")]
+                       for i in range(0, len(rna), 3) if i+3 <= len(rna)])
+    try:
+        return peptide[:peptide.index("*")]
+    except ValueError:
+        return peptide
