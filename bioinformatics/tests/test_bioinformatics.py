@@ -1,6 +1,7 @@
 from bioinformatics import (
     hamming_distance, find_all_approx_occurances, count_d,
-    frequest_words_with_missmatches, fwmrcp, translate)
+    frequest_words_with_missmatches, fwmrcp, translate,
+    peptide_encoding_problem)
 
 
 def test_hamming_distance():
@@ -42,3 +43,11 @@ def test_translate():
 
     rna = "GA"
     assert translate(rna) == ""
+
+
+def test_peptide_encdoding_problem():
+    dna = "ATGGCCATGGCCCCCAGAACTGAGATCAATAGTACCCGTATTAACGGGTGA"
+    peptide = "MA"
+    encoding_substrings = ["ATGGCC", "GGCCAT", "ATGGCC"]
+
+    assert peptide_encoding_problem(dna, peptide) == encoding_substrings

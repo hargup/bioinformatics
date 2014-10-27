@@ -244,3 +244,21 @@ def translate(rna):
         return peptide[:peptide.index("*")]
     except ValueError:
         return peptide
+
+
+def peptide_encoding_problem(dna, peptide):
+    """
+    Finds substrings of a genome encoding a given amino acid sequence.
+    """
+    seq_len = len(peptide)*3
+    encoding_substrings = []
+    for i in range(len(dna) - seq_len + 1):
+        substr = dna[i:i+seq_len]
+        rna_substr = substr.replace('T', 'U')
+        if translate(rna_substr) == peptide:
+            encoding_substrings.append(substr)
+
+        if translate(rev_comp_rna(rna_substr)) == peptide:
+            encoding_substrings.append(substr)
+
+    return encoding_substrings
