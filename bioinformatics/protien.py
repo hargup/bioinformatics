@@ -24,6 +24,7 @@ mass_table = {
 def calc_mass(peptide):
     return sum([mass_table[aa] for aa in peptide])
 
+
 def calc_circular_subpeptides(peptide):
     subpeptides = []
     n = len(peptide)
@@ -52,8 +53,22 @@ def calc_linear_spectrum(peptide):
 
 
 def calc_circular_spectrum(peptide):
-    subpeptides = [''] + calc_circular_subpeptides(peptide) + [peptide]
-    spectrum = [calc_mass(subpeptide) for subpeptide in subpeptides]
-    spectrum.sort()
+    prefix_mass = [0]
+    k = 0
+    for aa in peptide:
+        prefix_mass.append(prefix_mass[k] + mass_table[aa])
+        k += 1
 
-    return spectrum
+    peptide_mass = calc_mass(peptide)
+
+    cyclic_spectrum = [0]
+    for i in range(len(peptide)):
+        for j in range(i+1, len(peptide) + 1):
+            cyclic_spectrum.append(prefix_mass[j] - prefix_mass[i])
+            if i > 0 and j < len(peptide):
+                cyclic_spectrum.append(peptide_mass -
+                                       (prefix_mass[j] - prefix_mass[i]))
+
+    cyclic_spectrum.sort()
+    return cyclic_spectrum
+
