@@ -1,5 +1,6 @@
 from bioinformatics.protien import (
-    calc_mass, calc_linear_spectrum, calc_circular_spectrum)
+    calc_mass, calc_linear_spectrum, calc_circular_spectrum,
+    num_peptide_of_mass)
 
 
 def test_calc_mass():
@@ -14,3 +15,7 @@ def test_calc_linear_spectrum():
 def test_calc_circular_spectrum():
     assert calc_circular_spectrum("NQEL") == \
         [0, 113, 114, 128, 129, 227, 242, 242, 257, 355, 356, 370, 371, 484]
+
+
+def test_num_peptide_of_mass():
+    assert num_peptide_of_mass(1024) == 14712706211

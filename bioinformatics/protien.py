@@ -72,3 +72,19 @@ def calc_circular_spectrum(peptide):
     cyclic_spectrum.sort()
     return cyclic_spectrum
 
+
+def coin_change(coin_list, n):
+    m = len(coin_list)
+    table = [0 for i in range(n+1)]
+    table[0] = 1
+
+    for i in range(0, m):
+        for j in range(coin_list[i], n+1):
+            table[j] += table[j - coin_list[i]]
+
+    return table[n]
+
+
+def num_peptide_of_mass(mass):
+    mass_list = list(set(mass_table.values()))
+    return coin_change(mass_list, mass)
