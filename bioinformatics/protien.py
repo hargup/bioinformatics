@@ -148,3 +148,16 @@ def format_peptide_mass(peptide):
 
     out_str += str(mass_table[peptide[-1]])
     return out_str
+
+
+def cyclopeptide_score(peptide, spectrum):
+    peptide_spectrum = calc_circular_spectrum(peptide)
+    score = 0
+    for mass in peptide_spectrum:
+        # XXX: very slow algorithm
+        # mass in spectrum takes O(len(spectrum)) time
+        if mass in spectrum:
+            score += 1
+            spectrum.remove(mass)
+
+    return score
