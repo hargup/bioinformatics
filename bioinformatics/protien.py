@@ -20,6 +20,10 @@ mass_table = {
     "Y": 163,
     "W": 186}
 
+# doesn't contain Q and L
+unique_mass_aa = {"G", "A", "S", "P", "V", "T", "C", "I", "N", "D",
+                  "K", "E", "M", "H", "F", "R", "Y", "W"}
+
 
 def calc_mass(peptide):
     return sum([mass_table[aa] for aa in peptide])
@@ -85,6 +89,62 @@ def coin_change(coin_list, n):
     return table[n]
 
 
+def parent_mass(spectrum):
+    return spectrum[-1]
+
+
 def num_peptide_of_mass(mass):
     mass_list = list(set(mass_table.values()))
     return coin_change(mass_list, mass)
+
+
+def expand_peptide(peptide):
+    """Return k+1 lenght peptides from peptide of length k"""
+    k_1_peptides = [peptide + aa for aa in unique_mass_aa]
+    return k_1_peptides
+
+
+def is_subsequence(small_itr, large_itr):
+    i, j = 0, 0
+    while i < len(small_itr) and j < len(large_itr):
+        if small_itr[i] == large_itr[j]:
+            i += 1
+        j += 1
+    return i == len(small_itr)
+
+
+def is_consistent(peptide, spectrum):
+    """
+    This problem is as the problem of testing if spectrum
+    of peptide is a subsequence of spectrum
+    """
+    return is_subsequence(calc_linear_spectrum(peptide), spectrum)
+
+
+def cyclopeptide_sequencing(spectrum):
+    peptides = [""]
+    results = []
+    while len(peptides) > 0:
+        peptides = [k_1_peptide for peptide in peptides
+                    for k_1_peptide in expand_peptide(peptide)]
+        for peptide in peptides:
+            if calc_mass(peptide) == parent_mass(spectrum):
+                if calc_circular_spectrum(peptide) == spectrum:
+                    results.append(peptide)
+
+        peptides = [peptide for peptide in peptides
+                    if not calc_mass(peptide) == parent_mass(peptide)]
+
+        peptides = [peptide for peptide in peptides
+                    if is_consistent(peptide, spectrum)]
+
+    return results
+
+
+def format_peptide_mass(peptide):
+    out_str = ""
+    for aa in peptide[:-1]:
+        out_str += str(mass_table[aa]) + "-"
+
+    out_str += str(mass_table[peptide[-1]])
+    return out_str
