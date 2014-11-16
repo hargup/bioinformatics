@@ -1,3 +1,4 @@
+import copy
 mass_table = {
     "G": 57,
     "A": 71,
@@ -151,6 +152,7 @@ def format_peptide_mass(peptide):
 
 
 def cyclopeptide_score(peptide, spectrum):
+    spectrum = copy.deepcopy(spectrum)
     peptide_spectrum = calc_circular_spectrum(peptide)
     score = 0
     for mass in peptide_spectrum:
@@ -161,3 +163,46 @@ def cyclopeptide_score(peptide, spectrum):
             spectrum.remove(mass)
 
     return score
+
+
+def linear_score(peptide, spectrum):
+    spectrum = copy.deepcopy(spectrum)
+    peptide_spectrum = calc_linear_spectrum(peptide)
+    score = 0
+    for mass in peptide_spectrum:
+        # XXX: very slow algorithm
+        # mass in spectrum takes O(len(spectrum)) time
+        if mass in spectrum:
+            score += 1
+            spectrum.remove(mass)
+
+    return score
+
+
+def trim(leaderboard, spectrum, N):
+    peptide_cmp = lambda x, y: cmp(linear_score(x, spectrum),
+                                   linear_score(y, spectrum))
+    leaderboard.sort(cmp=peptide_cmp, reverse=True)
+    k = len(leaderboard)
+    for k in range(N+1, len(leaderboard)):
+        if linear_score(leaderboard[k-1], spectrum) < \
+                linear_score(leaderboard[N-1], spectrum):
+            break
+    return leaderboard[:k-1]
+
+
+def leaderboard_cyclopeptide_sequencing(spectrum, N):
+    leaderboard = {""}
+    leader_peptide = ""
+    while len(leaderboard) > 0:
+        leaderboard = [k_1_peptide for peptide in leaderboard
+                       for k_1_peptide in expand_peptide(peptide)
+                       if calc_mass(k_1_peptide) <= parent_mass(spectrum)]
+        for peptide in leaderboard:
+            if calc_mass(peptide) == parent_mass(spectrum):
+                if linear_score(peptide, spectrum) > \
+                        linear_score(leader_peptide, spectrum):
+                    leader_peptide = peptide
+
+        leaderboard = trim(leaderboard, spectrum, N)
+    return leader_peptide
